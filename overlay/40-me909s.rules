@@ -1,0 +1,2 @@
+ACTION=="add|change", SUBSYSTEM=="usb", ATTR{idVendor}=="12d1", ATTR{idProduct}=="15c1", ATTR{bConfigurationValue}!="3", ATTR{bConfigurationValue}:="0"
+ACTION=="add|change", SUBSYSTEM=="usb", ATTR{idVendor}=="12d1", ATTR{idProduct}=="15c1", ATTR{bConfigurationValue}!="3", RUN+="/bin/sh -c 'sleep 4; echo 3 > %S%p/bConfigurationValue'"

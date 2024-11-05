@@ -19,6 +19,33 @@ BUILD_DESKTOP=$4
 
 Main() {
 	case $RELEASE in
+		bookworm)
+			# Base
+			ln -sf ../usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+			apt-mark hold linux-u-boot-nanopineo2-legacy linux-image-legacy-sunxi64 linux-dtb-legacy-sunxi64 armbian-firmware
+			# tailscale
+			curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm.noarmor.gpg | tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
+			curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list >/dev/null
+			apt update
+			apt install tailscale
+			cp /tmp/overlay/99-tailscale.conf /etc/sysctl.d/
+			# nano-hat-oled
+			sed -i 's#overlays=#overlays=i2c0 #g' /boot/armbianEnv.txt
+			apt -y install python3-libgpiod python3-pil python3-smbus fonts-dejavu
+			mkdir /usr/share/nanohatoled
+			cp /tmp/overlay/nanohatoled/oled-start3.py /usr/share/nanohatoled/
+			cp /tmp/overlay/nanohatoled/splash.png /usr/share/nanohatoled/
+			cp /tmp/overlay/nanohatoled/nano-hat-oled.service /lib/systemd/system/
+			systemctl daemon-reload
+			systemctl enable nano-hat-oled
+			# 4G Network
+			cp /tmp/overlay/40-me909s.rules /etc/udev/rules.d/
+			cp /tmp/overlay/lte.nmconnection /etc/NetworkManager/system-connections/
+			chmod -R 600 /etc/NetworkManager/system-connections/lte.nmconnection
+			apt -y install modemmanager net-tools
+			#
+			apt clean && rm -rf /var/lib/apt/lists/*
+			;;
 		stretch)
 			# your code here
 			# InstallOpenMediaVault # uncomment to get an OMV 4 image
