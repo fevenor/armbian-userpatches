@@ -1,0 +1,28 @@
+Enables the Watchdog.
+
+---
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 1 +-
+ 1 file changed, 1 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+index 111111111111..222222222222 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+@@ -6195,13 +6195,13 @@
+ 	wdt: watchdog@feaf0000 {
+ 		compatible = "snps,dw-wdt";
+ 		reg = <0x0 0xfeaf0000 0x0 0x100>;
+ 		clocks = <&cru TCLK_WDT0>, <&cru PCLK_WDT0>;
+ 		clock-names = "tclk", "pclk";
+ 		interrupts = <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>;
+-		status = "disabled";
++		status = "okay";
+ 	};
+ 
+ 	spi0: spi@feb00000 {
+ 		compatible = "rockchip,rk3066-spi";
+ 		reg = <0x0 0xfeb00000 0x0 0x1000>;
+ 		interrupts = <GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>;
+-- 
+Armbian
+

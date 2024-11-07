@@ -19,6 +19,26 @@ BUILD_DESKTOP=$4
 
 Main() {
 	case $RELEASE in
+		bookworm)
+			# Base
+			echo "NTP=ntp.aliyun.com" >> /etc/systemd/timesyncd.conf
+			timedatectl set-timezone Asia/Shanghai
+			localectl set-locale LANG=zh_CN.UTF-8
+			apt install vim
+			# Network
+			cp /tmp/overlay/interfaces /etc/network/
+			echo "DNSStubListener=no" >> /etc/systemd/resolved.conf
+			echo "Domains=lan" >> /etc/systemd/resolved.conf
+			apt purge netplan.io
+			apt install ifupdown2 isc-dhcp-client
+			# Mount
+			mkdir /mnt/bare
+			cp /tmp/overlay/mnt-bare.mount /etc/systemd/system/
+			systemctl daemon-reload
+			systemctl enable mnt-bare.mount
+			# Clean
+			apt clean && rm -rf /var/lib/apt/lists/*
+			;;
 		stretch)
 			# your code here
 			# InstallOpenMediaVault # uncomment to get an OMV 4 image

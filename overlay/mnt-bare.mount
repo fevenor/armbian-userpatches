@@ -1,0 +1,11 @@
+[Unit]
+Description=Bare Mount Directory
+
+[Mount]
+What=/dev/nvme0n1p1
+Where=/mnt/bare
+Type=btrfs
+Options=defaults,ssd,compress=zstd
+
+[Install]
+WantedBy=multi-user.target
