@@ -22,22 +22,23 @@ Main() {
 		bookworm)
 			# Base
 			echo "NTP=ntp.aliyun.com" >> /etc/systemd/timesyncd.conf
-			timedatectl set-timezone Asia/Shanghai
-			localectl set-locale LANG=zh_CN.UTF-8
-			apt install vim
+			#timedatectl set-timezone Asia/Shanghai
+			#localectl set-locale LANG=zh_CN.UTF-8
+			apt update
+			apt install -y vim
 			# Network
 			cp /tmp/overlay/interfaces /etc/network/
 			echo "DNSStubListener=no" >> /etc/systemd/resolved.conf
 			echo "Domains=lan" >> /etc/systemd/resolved.conf
-			apt purge netplan.io
-			apt install ifupdown2 isc-dhcp-client
+			apt purge -y netplan.io
+			rm -rf /etc/netplan
+			apt install -y ifupdown2 isc-dhcp-client
 			# Mount
 			mkdir /mnt/bare
 			cp /tmp/overlay/mnt-bare.mount /etc/systemd/system/
-			systemctl daemon-reload
 			systemctl enable mnt-bare.mount
 			# Clean
-			apt clean && rm -rf /var/lib/apt/lists/*
+			apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 			;;
 		stretch)
 			# your code here
