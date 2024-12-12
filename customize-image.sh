@@ -25,7 +25,9 @@ Main() {
 			#timedatectl set-timezone Asia/Shanghai
 			#localectl set-locale LANG=zh_CN.UTF-8
 			apt update
-			apt install -y vim
+			apt install -y vim btrfs-progs zip unzip lm-sensors
+			apt-mark hold linux-dtb-vendor-rk35xx linux-image-vendor-rk35xx
+			echo "kernel.threads-max = 21510" >> /etc/sysctl.conf
 			# Network
 			cp /tmp/overlay/interfaces /etc/network/
 			echo "DNSStubListener=no" >> /etc/systemd/resolved.conf
@@ -39,6 +41,8 @@ Main() {
 			systemctl enable mnt-bare.mount
 			# Clean
 			apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
+			# fix same mac address
+			echo -n > /etc/machine-id
 			;;
 		stretch)
 			# your code here
